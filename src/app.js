@@ -23,7 +23,9 @@ import {
   applyInterest,
   resetData,
   estimateInterestPayouts,
-  formatCurrency
+  formatCurrency,
+  addChildAccount,
+  removeChildAccount
 } from './services/account-service.js';
 
 class BankOfDadApp extends LitElement {
@@ -217,6 +219,35 @@ class BankOfDadApp extends LitElement {
     }
   }
 
+  #handleChildCreated(event) {
+    try {
+      const {name} = event.detail;
+      const account = addChildAccount(name);
+      this.profileMessage = `Added account for ${account.name}.`;
+      this.profileError = '';
+      this.#refreshAccounts();
+    } catch (error) {
+      this.profileError = error.message;
+      this.profileMessage = '';
+    }
+  }
+
+  #handleChildRemoved(event) {
+    try {
+      const {childId} = event.detail;
+      const removed = removeChildAccount(childId);
+      this.profileMessage = `Removed account for ${removed.name}.`;
+      this.profileError = '';
+      if (this.selectedChildId === childId) {
+        this.#handleBackHome();
+      }
+      this.#refreshAccounts();
+    } catch (error) {
+      this.profileError = error.message;
+      this.profileMessage = '';
+    }
+  }
+
   #handleResetAccounts() {
     if (!window.confirm('Reset all account balances and history?')) {
       return;
@@ -271,9 +302,12 @@ class BankOfDadApp extends LitElement {
         .username=${this.authUsername}
         .message=${this.profileMessage}
         .error=${this.profileError}
+        .accounts=${this.accounts}
         @profile-closed=${this.#handleProfileClosed}
         @credentials-updated=${this.#handleCredentialUpdate}
         @accounts-reset=${this.#handleResetAccounts}
+        @child-created=${this.#handleChildCreated}
+        @child-removed=${this.#handleChildRemoved}
       ></profile-panel>
     `;
   }

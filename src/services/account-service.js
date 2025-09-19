@@ -188,3 +188,67 @@ export function formatCurrency(value) {
     currency: 'USD'
   }).format(Number(value || 0));
 }
+
+function slugifyName(name) {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-{2,}/g, '-')
+    || 'child';
+}
+
+function ensureUniqueId(base, map) {
+  if (!map[base]) {
+    return base;
+  }
+  let suffix = 2;
+  let candidate = `${base}-${suffix}`;
+  while (map[candidate]) {
+    suffix += 1;
+    candidate = `${base}-${suffix}`;
+  }
+  return candidate;
+}
+
+export function addChildAccount(name) {
+  const trimmed = String(name || '').trim();
+  if (!trimmed) {
+    throw new Error('Enter a child name to create an account.');
+  }
+  const map = getAccountState();
+  const duplicate = Object.values(map).some(
+    (account) => account.name.toLowerCase() === trimmed.toLowerCase()
+  );
+  if (duplicate) {
+    throw new Error('That child already has an account.');
+  }
+  const baseId = slugifyName(trimmed);
+  const childId = ensureUniqueId(baseId, map);
+  map[childId] = {
+    childId,
+    name: trimmed,
+    balance: 0,
+    transactions: []
+  };
+  persist(map);
+  return map[childId];
+}
+
+export function removeChildAccount(childId) {
+  const key = String(childId || '').trim();
+  if (!key) {
+    throw new Error('Select a child account to remove.');
+  }
+  const map = getAccountState();
+  const account = map[key];
+  if (!account) {
+    throw new Error('Account not found.');
+  }
+  if (Number(account.balance) !== 0) {
+    throw new Error('Withdraw remaining funds before removing this account.');
+  }
+  delete map[key];
+  persist(map);
+  return account;
+}
