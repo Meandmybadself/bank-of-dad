@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/npm/lit@3.1.2/+esm';
 import {formatCurrency} from '../services/account-service.js';
+import {buttonStyles, formStyles} from '../styles/shared-styles.js';
 
 export class ProfilePanel extends LitElement {
   static properties = {
@@ -19,7 +20,7 @@ export class ProfilePanel extends LitElement {
     this.accounts = [];
   }
 
-  static styles = css`
+  static styles = [buttonStyles, formStyles, css`
     .overlay {
       position: fixed;
       inset: 0;
@@ -102,7 +103,7 @@ export class ProfilePanel extends LitElement {
       font-size: 0.9rem;
       color: rgba(30, 41, 59, 0.72);
     }
-  `;
+  `];
 
   updated(changed) {
     if (changed.has('message') && this.message) {

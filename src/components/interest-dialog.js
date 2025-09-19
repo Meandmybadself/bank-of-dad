@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/npm/lit@3.1.2/+esm';
+import {buttonStyles, formStyles} from '../styles/shared-styles.js';
 
 export class InterestDialog extends LitElement {
   static properties = {
@@ -14,7 +15,7 @@ export class InterestDialog extends LitElement {
     this.error = '';
   }
 
-  static styles = css`
+  static styles = [buttonStyles, formStyles, css`
     dialog {
       border: none;
       border-radius: 16px;
@@ -51,7 +52,7 @@ export class InterestDialog extends LitElement {
       justify-content: flex-end;
       gap: 0.75rem;
     }
-  `;
+  `];
 
   updated(changes) {
     if (changes.has('open')) {

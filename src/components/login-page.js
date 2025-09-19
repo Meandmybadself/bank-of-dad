@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/npm/lit@3.1.2/+esm';
+import {buttonStyles, formStyles} from '../styles/shared-styles.js';
 
 export class LoginPage extends LitElement {
   static properties = {
@@ -10,7 +11,7 @@ export class LoginPage extends LitElement {
     this.error = '';
   }
 
-  static styles = css`
+  static styles = [buttonStyles, formStyles, css`
     :host {
       display: flex;
       align-items: center;
@@ -54,7 +55,7 @@ export class LoginPage extends LitElement {
       font-size: 0.95rem;
       color: rgba(30, 41, 59, 0.85);
     }
-  `;
+  `];
 
   #handleSubmit(event) {
     event.preventDefault();

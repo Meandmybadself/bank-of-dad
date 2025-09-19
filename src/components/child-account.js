@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/npm/lit@3.1.2/+esm';
 import {formatCurrency} from '../services/account-service.js';
+import {buttonStyles, formStyles} from '../styles/shared-styles.js';
 import './transaction-history.js';
 
 export class ChildAccount extends LitElement {
@@ -14,7 +15,7 @@ export class ChildAccount extends LitElement {
     this.error = '';
   }
 
-  static styles = css`
+  static styles = [buttonStyles, formStyles, css`
     :host {
       display: block;
       padding: 2rem clamp(1rem, 4vw, 4rem);
@@ -75,7 +76,7 @@ export class ChildAccount extends LitElement {
       padding: 0.9rem 1rem;
       margin-bottom: 1.5rem;
     }
-  `;
+  `];
 
   #emitBack() {
     this.dispatchEvent(

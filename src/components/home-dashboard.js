@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'https://cdn.jsdelivr.net/npm/lit@3.1.2/+esm';
 import {formatCurrency} from '../services/account-service.js';
+import {buttonStyles} from '../styles/shared-styles.js';
 
 export class HomeDashboard extends LitElement {
   static properties = {
@@ -13,7 +14,7 @@ export class HomeDashboard extends LitElement {
     this.lastLogin = '';
   }
 
-  static styles = css`
+  static styles = [buttonStyles, css`
     :host {
       display: block;
       padding: 2.5rem clamp(1rem, 4vw, 4rem);
@@ -77,7 +78,7 @@ export class HomeDashboard extends LitElement {
       text-align: center;
       color: rgba(30, 41, 59, 0.78);
     }
-  `;
+  `];
 
   #handleView(childId) {
     this.dispatchEvent(
