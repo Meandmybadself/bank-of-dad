@@ -82,5 +82,8 @@ dialog::backdrop {
 @media (max-width: 768px) {
   button {
     width: 100%;
+    padding: 1rem 1.5rem;
+    min-height: 48px;
+    font-size: 1.1rem;
   }
 }
